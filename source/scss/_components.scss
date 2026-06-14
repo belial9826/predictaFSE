@@ -1,0 +1,98 @@
+@use 'variables' as *;
+// Componentes Premium de FutbolIA
+
+// Botón Premium General
+.btn-premium-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: $color-bg-silo;
+    border: 1px solid $color-border-gray;
+    color: $color-text-white;
+    font-family: $font-sans;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: $transition-smooth;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+
+    &:hover {
+        background-color: rgba($color-text-white, 0.05);
+        border-color: rgba($color-primary, 0.4);
+        color: $color-primary;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+// Botón de Compra Destacado (WooCommerce / Plan Premium)
+.btn-premium-purchase {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border: none;
+    color: $color-text-white;
+    font-family: $font-mono;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: $transition-smooth;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+
+    &:hover {
+        background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+}
+
+// Tarjeta Bento Oscura (Silo deportivo)
+.card-bento-dark {
+    position: relative;
+    background-color: $color-bg-silo;
+    border: 1px solid $color-border-dark;
+    border-radius: $radius-xl;
+    padding: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: $transition-smooth;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba($color-primary, 0.03) 0%, transparent 70%);
+        pointer-events: none;
+        transition: $transition-smooth;
+    }
+
+    &:hover {
+        border-color: rgba($color-primary, 0.3);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+
+        &::after {
+            background: radial-gradient(circle, rgba($color-primary, 0.06) 0%, transparent 70%);
+        }
+    }
+}

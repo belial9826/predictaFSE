@@ -1,0 +1,540 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+$faq-max-width: 1280px;
+$faq-breakpoint-lg: 1024px;
+$faq-breakpoint-sm: 640px;
+
+$neutral-950: #0a0a0a;
+$neutral-900: #171717;
+$neutral-850: #1a1a1a;
+$neutral-800: #262626;
+$neutral-700: #404040;
+$neutral-600: #525252;
+$neutral-500: #737373;
+$neutral-400: #a3a3a3;
+$neutral-350: #b8b8b8;
+$neutral-200: #e5e5e5;
+$purple-400: #c084fc;
+$purple-300: #d8b4fe;
+$amber-400: #fbbf24;
+
+.FSE-faq {
+    max-width: $faq-max-width;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+    box-sizing: border-box;
+
+    @media (min-width: $faq-breakpoint-sm) {
+        padding: 48px 32px 64px;
+    }
+}
+
+.faq-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+body.predictafse-faq {
+    --wp--style--global--content-size: #{$faq-max-width};
+    --wp--style--global--wide-size: #{$faq-max-width};
+}
+
+body.predictafse-faq main.site-main-page,
+body.predictafse-faq .entry-content,
+body.predictafse-faq .wp-block-post-content {
+    max-width: $faq-max-width;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+body.predictafse-faq main.site-main-page {
+    padding: 32px 16px 48px;
+
+    @media (min-width: $faq-breakpoint-sm) {
+        padding: 48px 32px 64px;
+    }
+}
+
+body.predictafse-faq .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: $faq-max-width;
+}
+
+body.predictafse-faq .wp-block-post-title,
+body.predictafse-faq .page-header-container {
+    display: none;
+}
+
+// ─── Barra superior ───
+.faq-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $neutral-900;
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: $font-mono;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        color: $neutral-400;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &::before {
+            content: '←';
+        }
+
+        &:hover {
+            color: $color-primary;
+        }
+    }
+}
+
+.faq-top-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $neutral-500;
+    text-align: right;
+
+    &::before {
+        content: '?';
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        font-size: 10px;
+        font-weight: 700;
+        color: $color-primary;
+    }
+}
+
+// ─── Hero ───
+.faq-hero {
+    position: relative;
+    margin-bottom: 32px;
+    padding: 32px;
+    overflow: hidden;
+    background: linear-gradient(to right, $neutral-900, #0d0d0d, rgba(#312e81, 0.2));
+    border: 1px solid $neutral-800;
+    border-radius: $radius-xl;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+
+    @media (min-width: $faq-breakpoint-sm) {
+        padding: 48px;
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(48px);
+        pointer-events: none;
+    }
+
+    &::before {
+        top: 0;
+        right: 0;
+        width: 320px;
+        height: 320px;
+        background: rgba($color-primary, 0.05);
+    }
+
+    &::after {
+        left: 33%;
+        bottom: 0;
+        width: 240px;
+        height: 240px;
+        background: rgba($purple-400, 0.05);
+    }
+
+    > * {
+        position: relative;
+        z-index: 1;
+        max-width: 42rem;
+    }
+}
+
+.faq-hero-badge {
+    display: inline-block;
+    margin: 0 0 16px;
+    padding: 4px 12px;
+    font-family: $font-mono;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.2);
+    border-radius: 999px;
+}
+
+.faq-hero h2 {
+    margin: 0 0 16px;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: $color-text-white;
+}
+
+.faq-hero > p:not(.faq-hero-badge) {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.625;
+    color: $neutral-400;
+
+    @media (min-width: $faq-breakpoint-sm) {
+        font-size: 14px;
+    }
+}
+
+// ─── Grid ───
+.faq-grid {
+    width: 100%;
+    gap: 32px !important;
+    align-items: flex-start !important;
+
+    @media (min-width: $faq-breakpoint-lg) {
+        flex-wrap: nowrap !important;
+
+        > .wp-block-column:first-child {
+            flex-basis: 33.33% !important;
+            max-width: 33.33%;
+        }
+
+        > .wp-block-column:last-child {
+            flex-basis: 66.66% !important;
+            max-width: 66.66%;
+        }
+    }
+}
+
+// ─── Sidebar ───
+.faq-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.faq-vip-card {
+    padding: 24px;
+    background: linear-gradient(to bottom right, rgba(#3b0764, 0.4), $neutral-900);
+    border: 1px solid rgba(#a855f7, 0.2);
+    border-radius: $radius-lg;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+
+    > p:not(.faq-vip-badge) {
+        margin: 0 0 16px;
+        font-size: 12px;
+        line-height: 1.625;
+        color: $neutral-400;
+    }
+
+    h4 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        font-weight: 900;
+        line-height: 1.3;
+        color: $color-text-white;
+    }
+
+    .wp-block-buttons {
+        margin: 0;
+    }
+}
+
+.faq-vip-badge {
+    display: inline-block;
+    margin: 0 0 12px;
+    padding: 4px 10px;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $purple-300;
+    background-color: rgba(#a855f7, 0.2);
+    border: 1px solid rgba(#a855f7, 0.3);
+    border-radius: 999px;
+}
+
+.faq-vip-btn .wp-block-button__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 16px;
+    font-family: $font-mono;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $color-text-white !important;
+    background: linear-gradient(to right, #9333ea, #4f46e5) !important;
+    border: none;
+    border-radius: $radius-md;
+    transition: $transition-smooth;
+
+    &::after {
+        content: '✦';
+        color: $amber-400;
+    }
+
+    &:hover {
+        background: linear-gradient(to right, #a855f7, #6366f1) !important;
+    }
+}
+
+.faq-support-card {
+    padding: 24px;
+    background-color: $neutral-900;
+    border: 1px solid $neutral-800;
+    border-radius: $radius-lg;
+
+    h4 {
+        margin: 0 0 12px;
+        font-family: $font-mono;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: $color-text-white;
+    }
+
+    > p:not(.faq-support-email) {
+        margin: 0 0 16px;
+        font-size: 12px;
+        line-height: 1.625;
+        color: $neutral-400;
+    }
+
+    .wp-block-buttons {
+        margin: 0 0 12px;
+    }
+}
+
+.faq-support-btn .wp-block-button__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 16px;
+    font-family: $font-mono;
+    font-size: 12px;
+    font-weight: 700;
+    color: $color-primary !important;
+    background-color: $neutral-800 !important;
+    border: 1px solid $neutral-700 !important;
+    border-radius: $radius-md;
+    transition: $transition-smooth;
+
+    &::after {
+        content: '⚡';
+    }
+
+    &:hover {
+        background-color: color.adjust($neutral-800, $lightness: 4%) !important;
+    }
+}
+
+.faq-support-email {
+    margin: 0;
+    font-family: $font-mono;
+    font-size: 10px;
+    text-align: center;
+    color: $neutral-500;
+
+    a {
+        color: $neutral-400;
+        text-decoration: underline;
+
+        &:hover {
+            color: $color-primary;
+        }
+    }
+}
+
+// ─── Contenido FAQ ───
+.faq-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.faq-category {
+    margin-bottom: 8px;
+}
+
+.faq-cat-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    &::before {
+        content: '';
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        background-color: $neutral-900;
+        border: 1px solid $neutral-800;
+        border-radius: 8px;
+    }
+
+    &.ia::before {
+        content: '◈';
+        color: $color-primary;
+    }
+
+    &.pagos::before {
+        content: '◆';
+        color: $purple-400;
+    }
+
+    &.wp::before {
+        content: '▣';
+        color: $amber-400;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: $color-text-white;
+    }
+}
+
+.faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+// ─── Acordeón (bloque Details) ───
+.faq-page details.faq-item {
+    overflow: hidden;
+    background-color: $neutral-950;
+    border: 1px solid $neutral-900;
+    border-radius: $radius-lg;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        border-color: $neutral-850;
+    }
+
+    &.open,
+    &[open] {
+        background-color: rgba($neutral-900, 0.6);
+        border-color: $neutral-800;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+        summary {
+            color: $neutral-200;
+
+            &::after {
+                transform: rotate(180deg);
+                color: $color-primary;
+            }
+        }
+
+        > :not(summary) {
+            display: block;
+        }
+    }
+
+    &:not(.open):not([open]) > :not(summary) {
+        display: none;
+    }
+
+    summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 20px;
+        font-family: $font-sans;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: $neutral-200;
+        cursor: pointer;
+        list-style: none;
+        user-select: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::after {
+            content: '⌄';
+            flex-shrink: 0;
+            font-size: 18px;
+            line-height: 1;
+            color: $neutral-500;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+    }
+
+    > :not(summary) {
+        padding: 4px 20px 20px;
+        font-size: 12px;
+        line-height: 1.625;
+        color: $neutral-350;
+        border-top: 1px solid rgba($neutral-900, 0.5);
+    }
+
+    p {
+        margin: 0 0 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    ul {
+        margin: 0 0 12px;
+        padding-left: 1.25rem;
+        color: $neutral-400;
+
+        li {
+            margin-bottom: 4px;
+        }
+    }
+
+    strong {
+        color: $neutral-200;
+        font-weight: 700;
+    }
+}

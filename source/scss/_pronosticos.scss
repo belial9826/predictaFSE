@@ -1,0 +1,306 @@
+@use 'variables' as *;
+
+$pronosticos-max-width: 1280px;
+$pronosticos-breakpoint-lg: 1024px;
+$pronosticos-breakpoint-sm: 640px;
+
+$neutral-950: #0a0a0a;
+$neutral-900: #171717;
+$neutral-850: #1a1a1a;
+$neutral-800: #262626;
+$neutral-600: #525252;
+$neutral-500: #737373;
+$neutral-400: #a3a3a3;
+$neutral-300: #d4d4d4;
+$emerald-300: #6ee7b7;
+$emerald-400: #34d399;
+$emerald-500: #10b981;
+
+.FSE-pronosticos {
+    max-width: $pronosticos-max-width;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+    box-sizing: border-box;
+
+    @media (min-width: $pronosticos-breakpoint-sm) {
+        padding: 48px 32px 64px;
+    }
+}
+
+.pronosticos-page {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    font-family: $font-sans;
+
+    &.wp-block-group,
+    .wp-block-group {
+        margin: 0;
+        padding: 0;
+        max-width: none;
+    }
+}
+
+body.predictafse-pronosticos {
+    --wp--style--global--content-size: #{$pronosticos-max-width};
+    --wp--style--global--wide-size: #{$pronosticos-max-width};
+}
+
+body.predictafse-pronosticos main.site-main-page,
+body.predictafse-pronosticos .entry-content,
+body.predictafse-pronosticos .wp-block-post-content {
+    max-width: $pronosticos-max-width;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+body.predictafse-pronosticos .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: $pronosticos-max-width;
+}
+
+body.predictafse-pronosticos .wp-block-post-title,
+body.predictafse-pronosticos .page-header-container {
+    display: none;
+}
+
+// ─── Migas de pan (space-y-8 › breadcrumb) ───
+.pronosticos-breadcrumb {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center !important;
+    gap: 6px !important;
+
+    p {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 12px;
+        line-height: 1.4;
+        color: $neutral-500;
+    }
+
+    a {
+        color: $neutral-500;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $emerald-400;
+        }
+    }
+}
+
+.pronosticos-breadcrumb-sep {
+    color: $neutral-600 !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+.pronosticos-breadcrumb-current {
+    font-weight: 500 !important;
+    color: $neutral-300 !important;
+}
+
+// ─── Cabecera del directorio ───
+.pronosticos-header {
+    display: flex !important;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 0 24px !important;
+    border-bottom: 1px solid $neutral-900;
+
+    @media (min-width: $pronosticos-breakpoint-sm) {
+        flex-direction: row;
+        align-items: center !important;
+    }
+}
+
+.pronosticos-header-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.pronosticos-header-label {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: $font-mono !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    color: $emerald-400 !important;
+}
+
+.pronosticos-header h1,
+.pronosticos-header .wp-block-heading {
+    margin: 4px 0 0 !important;
+    padding: 0 !important;
+    font-family: $font-sans !important;
+    font-size: 30px !important;
+    font-weight: 900 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.025em !important;
+    color: $color-text-white !important;
+
+    @media (min-width: $pronosticos-breakpoint-sm) {
+        font-size: 36px !important;
+    }
+}
+
+.pronosticos-header-desc {
+    max-width: 672px;
+    margin: 4px 0 0 !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: $neutral-400 !important;
+}
+
+.pronosticos-back {
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        font-family: $font-mono;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        color: $emerald-400;
+        text-decoration: none;
+        background-color: $neutral-900;
+        border: 1px solid $neutral-800;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:hover {
+            color: $emerald-300;
+            background-color: $neutral-800;
+        }
+    }
+}
+
+// ─── Listado + paginación ───
+.pronosticos-listado {
+    width: 100%;
+
+    .partidos-directory-block {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .partidos-grid {
+        gap: 24px;
+    }
+}
+
+.pronosticos-listado .partidos-pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding-top: 16px;
+    font-family: $font-mono;
+    font-size: 12px;
+    user-select: none;
+    background: none;
+    border: none;
+
+    ul.page-numbers {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background: none;
+        border: none;
+        min-width: 0;
+        height: auto;
+    }
+
+    li {
+        margin: 0;
+        list-style: none;
+    }
+
+    a.page-numbers,
+    span.page-numbers {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        margin: 0;
+        padding: 0 8px;
+        font-family: $font-mono;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1;
+        color: $neutral-400;
+        text-decoration: none;
+        background-color: $neutral-900;
+        border: 1px solid $neutral-800;
+        border-radius: 8px;
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+
+        &:hover {
+            color: $color-text-white;
+            background-color: $neutral-800;
+        }
+
+        &.current {
+            color: $emerald-400;
+            font-weight: 900;
+            background-color: rgba($emerald-500, 0.1);
+            border-color: rgba($emerald-500, 0.3);
+
+            &:hover {
+                color: $emerald-400;
+                background-color: rgba($emerald-500, 0.1);
+            }
+        }
+
+        &.dots {
+            min-width: auto;
+            height: auto;
+            padding: 0 4px;
+            color: $neutral-600;
+            background: transparent;
+            border: none;
+
+            &:hover {
+                color: $neutral-600;
+                background: transparent;
+            }
+        }
+
+        &.next,
+        &.prev {
+            padding: 0 12px;
+            font-weight: 600;
+            color: $neutral-300;
+
+            &:hover {
+                color: $color-text-white;
+            }
+        }
+    }
+}

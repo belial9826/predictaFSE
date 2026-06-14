@@ -1,0 +1,524 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+$contact-max-width: 1280px;
+$contact-breakpoint-lg: 1024px;
+$contact-breakpoint-sm: 640px;
+
+$neutral-950: #0a0a0a;
+$neutral-900: #171717;
+$neutral-850: #1a1a1a;
+$neutral-800: #262626;
+$neutral-700: #404040;
+$neutral-600: #525252;
+$neutral-500: #737373;
+$neutral-400: #a3a3a3;
+$neutral-200: #e5e5e5;
+$teal-500: #14b8a6;
+$purple-400: #c084fc;
+
+.FSE-contact {
+    max-width: $contact-max-width;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+    box-sizing: border-box;
+
+    @media (min-width: $contact-breakpoint-sm) {
+        padding: 48px 32px 64px;
+    }
+}
+
+.contact-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+body.predictafse-contacto {
+    --wp--style--global--content-size: #{$contact-max-width};
+    --wp--style--global--wide-size: #{$contact-max-width};
+}
+
+body.predictafse-contacto main.site-main-page,
+body.predictafse-contacto .entry-content,
+body.predictafse-contacto .wp-block-post-content {
+    max-width: $contact-max-width;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+body.predictafse-contacto main.site-main-page {
+    padding: 32px 16px 48px;
+
+    @media (min-width: $contact-breakpoint-sm) {
+        padding: 48px 32px 64px;
+    }
+}
+
+body.predictafse-contacto .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: $contact-max-width;
+}
+
+body.predictafse-contacto .wp-block-post-title,
+body.predictafse-contacto .page-header-container {
+    display: none;
+}
+
+// ─── Barra superior ───
+.contact-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $neutral-900;
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: $font-mono;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        color: $neutral-400;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &::before {
+            content: '←';
+        }
+
+        &:hover {
+            color: $color-primary;
+        }
+    }
+}
+
+.contact-top-label {
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $neutral-500;
+    text-align: right;
+}
+
+// ─── Grid principal ───
+.contact-grid {
+    width: 100%;
+    gap: 32px !important;
+    align-items: flex-start !important;
+
+    @media (min-width: $contact-breakpoint-lg) {
+        flex-wrap: nowrap !important;
+    }
+
+    > .wp-block-column {
+        width: 100%;
+    }
+
+    @media (min-width: $contact-breakpoint-lg) {
+        > .wp-block-column:first-child {
+            flex-basis: 33.33% !important;
+            max-width: 33.33%;
+        }
+
+        > .wp-block-column:last-child {
+            flex-basis: 66.66% !important;
+            max-width: 66.66%;
+        }
+    }
+}
+
+// ─── Panel info (columna izquierda) ───
+.contact-info {
+    position: relative;
+    padding: 24px;
+    overflow: hidden;
+    background: linear-gradient(to bottom right, $neutral-900, rgba(#312e81, 0.3));
+    border: 1px solid $neutral-800;
+    border-radius: $radius-lg;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+
+    @media (min-width: $contact-breakpoint-sm) {
+        padding: 32px;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 176px;
+        height: 176px;
+        background: rgba($purple-400, 0.05);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    > * {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+.contact-badge {
+    display: inline-block;
+    margin: 0 0 16px;
+    padding: 2px 8px;
+    font-family: $font-mono;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.1);
+    border: 1px solid rgba($color-primary, 0.2);
+    border-radius: 4px;
+}
+
+.contact-info h2 {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: $color-text-white;
+}
+
+.contact-info > p:not(.contact-badge):not(.contact-note):not(.contact-box-label) {
+    margin: 0 0 16px;
+    font-size: 12px;
+    line-height: 1.625;
+    color: $neutral-400;
+}
+
+.contact-box {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 16px;
+    padding: 16px;
+    background-color: rgba($neutral-950, 0.5);
+    border: 1px solid rgba($neutral-850, 0.6);
+    border-radius: $radius-md;
+
+    &::before {
+        content: '';
+        grid-column: 1;
+        grid-row: 1;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+
+    &.mail::before {
+        content: '✉';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: $color-primary;
+        background-color: rgba($color-primary, 0.15);
+        border: 1px solid rgba($color-primary, 0.2);
+    }
+
+    &.privacy {
+        background-color: rgba($neutral-950, 0.3);
+        border-color: rgba($neutral-850, 0.4);
+
+        &::before {
+            content: '⛨';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: $purple-400;
+            background-color: rgba(#a855f7, 0.1);
+            border: 1px solid rgba(#a855f7, 0.2);
+        }
+    }
+
+    > p,
+    > .wp-block-group {
+        grid-column: 2;
+    }
+
+    p {
+        margin: 0 0 4px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.contact-box-label {
+    display: block;
+    margin: 0 0 4px;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $neutral-500;
+}
+
+.contact-box a {
+    font-family: $font-mono;
+    font-size: 13px;
+    font-weight: 700;
+    color: $color-text-white;
+    text-decoration: none;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: $color-primary;
+    }
+}
+
+.contact-box p:not(.contact-box-label) {
+    font-size: 11px;
+    line-height: 1.625;
+    color: $neutral-400;
+}
+
+.contact-note {
+    margin: 8px 0 0;
+    font-family: $font-mono;
+    font-size: 9px;
+    line-height: 1.625;
+    color: $neutral-500;
+}
+
+// ─── Panel formulario (columna derecha) ───
+.contact-form {
+    padding: 24px;
+    background-color: $neutral-900;
+    border: 1px solid $neutral-800;
+    border-radius: $radius-xl;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+
+    @media (min-width: $contact-breakpoint-sm) {
+        padding: 32px;
+    }
+
+    h3 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 24px;
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: $color-text-white;
+
+        &::before {
+            content: '💬';
+            font-size: 18px;
+            line-height: 1;
+            color: $color-primary;
+        }
+    }
+
+    .wpcf7 {
+        margin: 0;
+    }
+}
+
+// ─── Contact Form 7 ───
+.contact-form .wpcf7-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media (min-width: $contact-breakpoint-sm) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 16px;
+        row-gap: 20px;
+    }
+
+    > p,
+    > div {
+        margin: 0;
+    }
+
+    // Campos ancho completo
+    p:has(textarea),
+    p:has(select),
+    p:has(.wpcf7-submit),
+    p:has(.wpcf7-acceptance),
+    .wpcf7-response-output,
+    .wpcf7-spinner {
+        @media (min-width: $contact-breakpoint-sm) {
+            grid-column: 1 / -1;
+        }
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-family: $font-mono;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: $neutral-400;
+    }
+
+    .wpcf7-form-control-wrap {
+        display: block;
+        width: 100%;
+    }
+
+    input[type='text'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='url'],
+    input[type='number'],
+    select,
+    textarea,
+    .wpcf7-form-control:not(.wpcf7-submit):not(.wpcf7-acceptance) {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 14px;
+        font-family: $font-sans;
+        font-size: 12px;
+        color: $neutral-200;
+        background-color: $neutral-950;
+        border: 1px solid $neutral-800;
+        border-radius: $radius-md;
+        transition: border-color 0.3s ease;
+        appearance: none;
+
+        &:hover {
+            border-color: rgba($neutral-700, 0.8);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $color-primary;
+        }
+
+        &::placeholder {
+            color: $neutral-600;
+        }
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.625;
+    }
+
+    select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23737373' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+    }
+
+    p:has(.wpcf7-submit) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 8px;
+    }
+
+    input.wpcf7-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: auto;
+        min-width: 180px;
+        padding: 12px 24px;
+        font-family: $font-mono;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: $color-bg-base;
+        background: linear-gradient(to right, $color-primary, $teal-500);
+        border: none;
+        border-radius: $radius-md;
+        box-shadow: 0 4px 12px rgba($color-primary, 0.25);
+        cursor: pointer;
+        transition: $transition-smooth;
+
+        &::after {
+            content: '→';
+            margin-left: 2px;
+        }
+
+        &:hover {
+            background: linear-gradient(to right, color.adjust($color-primary, $lightness: 5%), color.adjust($teal-500, $lightness: 5%));
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .wpcf7-not-valid-tip {
+        display: block;
+        margin-top: 6px;
+        font-size: 11px;
+        color: #f87171;
+    }
+
+    .wpcf7-not-valid {
+        border-color: #f87171 !important;
+    }
+}
+
+.contact-form .wpcf7-response-output {
+    margin: 0;
+    padding: 12px 16px;
+    font-family: $font-mono;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: $radius-md;
+
+    &.wpcf7-validation-errors {
+        color: #fca5a5;
+        background-color: rgba(127, 29, 29, 0.2);
+        border: 1px solid rgba(127, 29, 29, 0.4);
+    }
+
+    &.wpcf7-mail-sent-ok {
+        color: $color-primary;
+        background-color: rgba($color-primary, 0.1);
+        border: 1px solid rgba($color-primary, 0.25);
+    }
+
+    &.wpcf7-mail-sent-ng,
+    &.wpcf7-aborted,
+    &.wpcf7-spam-blocked {
+        color: #fca5a5;
+        background-color: rgba(127, 29, 29, 0.2);
+        border: 1px solid rgba(127, 29, 29, 0.4);
+    }
+}
+
+.contact-form .wpcf7-spinner {
+    margin: 0;
+}

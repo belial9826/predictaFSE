@@ -1,0 +1,14 @@
+// Archivo de Compilación SASS Principal - Predicta FSE
+
+// 1. Configuración & Variables
+@use 'variables' as *;
+
+// 2. Estilos Globales & Blueprint
+@use 'global' as *;
+
+// 3. Estilos de Componentes Comunes
+@use 'components' as *;
+
+// 4. Secciones globales (header + footer en todas las páginas)
+@use 'header' as *;
+@use 'footer' as *;

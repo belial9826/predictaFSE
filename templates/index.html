@@ -1,0 +1,32 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"FSE-home","layout":{"type":"default"}} -->
+<main class="wp-block-group FSE-home">
+
+    <!-- wp:group {"className":"home-partidos","layout":{"type":"default"}} -->
+    <section class="wp-block-group home-partidos">
+        <!-- wp:group {"className":"home-partidos-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+        <div class="wp-block-group home-partidos-head">
+            <!-- wp:group {"layout":{"type":"default"}} -->
+            <div class="wp-block-group">
+                <!-- wp:paragraph {"className":"home-section-label"} -->
+                <p class="home-section-label">FEEDS EN VIVO</p>
+                <!-- /wp:paragraph -->
+                <!-- wp:heading {"level":1} -->
+                <h1 class="wp-block-heading">Partidos &amp; Pronósticos IA</h1>
+                <!-- /wp:heading -->
+            </div>
+            <!-- /wp:group -->
+        </div>
+        <!-- /wp:group -->
+
+        <!-- wp:shortcode -->
+        [partidos_grid per_page="12"]
+        <!-- /wp:shortcode -->
+    </section>
+    <!-- /wp:group -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

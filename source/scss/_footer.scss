@@ -1,0 +1,307 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+$footer-max-width: 1280px;
+$footer-breakpoint-md: 768px;
+$footer-breakpoint-sm: 640px;
+
+// Neutrales alineados con design/src/App.tsx (#global-footer)
+$neutral-950: #0a0a0a;
+$neutral-900: #171717;
+$neutral-800: #262626;
+$neutral-600: #525252;
+$neutral-500: #737373;
+$neutral-400: #a3a3a3;
+$neutral-300: #d4d4d4;
+$rose-400: #fb7185;
+$rose-900: #881337;
+$orange-500: #f97316;
+
+.FSE-footer {
+    position: relative;
+    box-sizing: border-box;
+    max-width: $footer-max-width;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: $font-sans;
+    font-size: 12px;
+    line-height: 1.625;
+    color: $neutral-500;
+    background-color: transparent;
+    border: none;
+
+    // Fondo y borde superior a ancho completo
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 50%;
+        width: 100vw;
+        height: 100%;
+        transform: translateX(-50%);
+        background-color: $neutral-950;
+        border-top: 1px solid $neutral-900;
+        pointer-events: none;
+    }
+
+    p {
+        margin: 0 0 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    // ─── Grid 4 columnas ───
+    .footer-cols {
+        gap: 32px;
+
+        @media (min-width: $footer-breakpoint-md) {
+            flex-wrap: nowrap !important;
+
+            > .wp-block-column {
+                flex-basis: 25%;
+                flex-grow: 1;
+            }
+        }
+    }
+
+    .footer-label {
+        margin-bottom: 12px;
+        font-family: $font-mono;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: $color-text-white;
+    }
+
+    // ─── Col 1: Marca ───
+    .footer-brand {
+        > .wp-block-group:first-child {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .wp-block-site-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            padding: 4px;
+            border-radius: 8px;
+            background-color: $color-primary;
+            box-sizing: border-box;
+        }
+
+        .wp-block-site-logo img {
+            width: 20px;
+            height: 20px;
+            border-radius: 0;
+            object-fit: contain;
+        }
+
+        .wp-block-site-title {
+            margin: 0;
+            line-height: 1.2;
+
+            a {
+                font-family: $font-sans;
+                font-size: 14px;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                color: $color-text-white;
+                text-decoration: none;
+            }
+        }
+
+        .footer-copy {
+            display: block;
+            margin-top: 12px;
+            font-family: $font-mono;
+            font-size: 10px;
+            color: $neutral-600;
+        }
+    }
+
+    // ─── Col 2: Pagos ePayco ───
+    .footer-paybox {
+        padding: 16px;
+        background-color: rgba($neutral-900, 0.4);
+        border: 1px solid rgba($neutral-800, 0.8);
+        border-radius: $radius-md;
+    }
+
+    .footer-epayco {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+        font-family: $font-sans;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: $color-text-white;
+
+        strong {
+            color: $orange-500;
+            font-weight: 900;
+        }
+
+        .badge-ssl {
+            display: inline-block;
+            padding: 2px 6px;
+            font-family: $font-mono;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: $color-primary;
+            background-color: rgba($color-primary, 0.1);
+            border: 1px solid rgba($color-primary, 0.2);
+            border-radius: 4px;
+        }
+    }
+
+    .footer-payments .footer-paybox > p:not(.footer-epayco):not(.pay-badges) {
+        font-size: 10px;
+        line-height: 1.625;
+        color: $neutral-400;
+    }
+
+    .pay-badges {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        margin-top: 4px;
+        margin-bottom: 0;
+        user-select: none;
+
+        span {
+            display: inline-block;
+            padding: 2px 6px;
+            font-family: $font-mono;
+            font-size: 8px;
+            font-weight: 700;
+            color: $neutral-300;
+            background-color: $color-bg-base;
+            border: 1px solid $neutral-800;
+            border-radius: 4px;
+
+            &:first-child {
+                letter-spacing: 0.1em;
+                color: $color-text-white;
+            }
+
+            &:last-child {
+                color: $color-primary;
+            }
+        }
+    }
+
+    // ─── Col 3: Métricas ───
+    .footer-metrics {
+        .wp-block-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            li {
+                margin: 0 0 4px;
+                padding: 0;
+                font-size: 12px;
+                line-height: 1.5;
+                color: $neutral-500;
+
+                &::before {
+                    content: '· ';
+                }
+            }
+        }
+    }
+
+    // ─── Col 4: Nota regulatoria ───
+    .footer-note {
+        font-size: 11px;
+        line-height: 1.625;
+        color: $neutral-500;
+    }
+
+    .footer-alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        margin-top: 12px;
+        padding: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: $rose-400;
+        background-color: rgba($rose-900, 0.2);
+        border: 1px solid rgba($rose-900, 0.3);
+        border-radius: $radius-md;
+
+        i {
+            flex-shrink: 0;
+            margin-top: 2px;
+            font-size: 16px;
+        }
+    }
+
+    // ─── Barra inferior ───
+    .footer-bar {
+        gap: 16px;
+        padding-top: 32px;
+        border-top: 1px solid $neutral-900;
+        font-size: 12px;
+        color: $neutral-600;
+
+        @media (min-width: $footer-breakpoint-sm) {
+            flex-wrap: nowrap !important;
+            align-items: center;
+        }
+
+        > p:first-child {
+            margin: 0;
+            flex: 1 1 auto;
+
+            a {
+                font-weight: 600;
+                color: $color-primary;
+                text-decoration: underline;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: color.adjust($color-primary, $lightness: 10%);
+                }
+            }
+        }
+    }
+
+    .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 0;
+        flex-shrink: 0;
+
+        a {
+            color: $neutral-600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: $transition-smooth;
+
+            &:hover {
+                text-decoration: underline;
+                color: $neutral-400;
+            }
+        }
+    }
+}
