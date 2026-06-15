@@ -17,7 +17,7 @@ if ( ! empty( $mi_tema_files ) && is_array( $mi_tema_files ) ) {
 }
 
 
-function mi_tema_fse_setup() {
+function predictafse_setup() {
     add_theme_support( 'woocommerce' );
     add_theme_support( 'wc-product-gallery-zoom' );
     add_theme_support( 'wc-product-gallery-lightbox' );
@@ -66,10 +66,10 @@ function mi_tema_fse_setup() {
         'footer'  => esc_html__( 'Menú del Pie de Página', 'predictafse' ),
     ) );
 }
-add_action( 'after_setup_theme', 'mi_tema_fse_setup' );
+add_action( 'after_setup_theme', 'predictafse_setup' );
 
 // Registrar áreas de widgets (sidebar clásica para compatibilidad con plugins)
-function registrarAreasDeWidgets() {
+function predictafse_register_widgets() {
     register_sidebar( array(
         'name'          => esc_html__( 'Barra Lateral Principal', 'predictafse' ),
         'id'            => 'sidebar-1',
@@ -80,5 +80,5 @@ function registrarAreasDeWidgets() {
         'after_title'   => '</h2>',
     ) );
 }
-add_action( 'widgets_init', 'registrarAreasDeWidgets' );
+add_action( 'widgets_init', 'predictafse_register_widgets' );
 

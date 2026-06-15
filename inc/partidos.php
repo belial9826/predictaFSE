@@ -1,6 +1,6 @@
 <?php
 
-function predictafseGetPartidoProbabilities($post_id) {
+function predictafse_partido_prob($post_id) {
     $result = array(
         'home'       => '—',
         'draw'       => '—',
@@ -16,9 +16,9 @@ function predictafseGetPartidoProbabilities($post_id) {
     if (!empty($json_api)) {
         $data = json_decode($json_api, true);
         if (is_array($data) && !empty($data['percent']) && is_array($data['percent'])) {
-            $result['home'] = predictafseCleanPercent($data['percent']['home'] ?? '');
-            $result['draw'] = predictafseCleanPercent($data['percent']['draw'] ?? '');
-            $result['away'] = predictafseCleanPercent($data['percent']['away'] ?? '');
+            $result['home'] = predictafse_pct_clean($data['percent']['home'] ?? '');
+            $result['draw'] = predictafse_pct_clean($data['percent']['draw'] ?? '');
+            $result['away'] = predictafse_pct_clean($data['percent']['away'] ?? '');
         }
     }
 
@@ -26,21 +26,21 @@ function predictafseGetPartidoProbabilities($post_id) {
     if (!empty($analisis)) {
         $data = json_decode($analisis, true);
         if (is_array($data) && !empty($data['possible_winner']['probability'])) {
-            $result['confidence'] = predictafseCleanPercent($data['possible_winner']['probability']);
+            $result['confidence'] = predictafse_pct_clean($data['possible_winner']['probability']);
         }
     }
 
     return $result;
 }
 
-function predictafseCleanPercent($value) {
+function predictafse_pct_clean($value) {
     if ($value === '' || $value === null) {
         return '—';
     }
     return str_replace('%', '', (string) $value);
 }
 
-function predictafseGetTeamShortName($team_post) {
+function predictafse_team_short($team_post) {
     if (empty($team_post) || !is_object($team_post)) {
         return '—';
     }
@@ -51,7 +51,7 @@ function predictafseGetTeamShortName($team_post) {
     return mb_strtoupper(mb_substr($title, 0, 3));
 }
 
-function predictafseGetPartidosArchiveUrl() {
+function predictafse_partidos_url() {
     $pagina = get_page_by_path('pronosticos-de-futbol');
     if ($pagina instanceof WP_Post) {
         $url = get_permalink($pagina->ID);
@@ -76,7 +76,7 @@ function predictafseGetPartidosArchiveUrl() {
     return home_url('/pronosticos-de-futbol/');
 }
 
-function predictafseGetPartidoFormaFromApi($data, $side) {
+function predictafse_partido_forma($data, $side) {
     if (!is_array($data) || empty($side)) {
         return '';
     }
@@ -104,7 +104,7 @@ function predictafseGetPartidoFormaFromApi($data, $side) {
     return '';
 }
 
-function predictafseGetPartidoCardExcerpt($post_id, $contexto) {
+function predictafse_partido_excerpt($post_id, $contexto) {
     $excerpt = get_the_excerpt($post_id);
     if (!empty($excerpt)) {
         return wp_trim_words(wp_strip_all_tags($excerpt), 42, '…');
@@ -136,7 +136,7 @@ function predictafseGetPartidoCardExcerpt($post_id, $contexto) {
     return '';
 }
 
-function predictafseFormatPartidoStartDate($fecha, $hora) {
+function predictafse_partido_date($fecha, $hora) {
     $fecha = trim((string) $fecha);
     $hora = trim((string) $hora);
 
@@ -163,20 +163,20 @@ function predictafseFormatPartidoStartDate($fecha, $hora) {
     return $fecha . 'T' . $hora . ':00';
 }
 
-function predictafseBuildPartidoCardFromPost($post_id) {
-    $contexto = predictafseGetPartidoContexto($post_id);
+function predictafse_partido_card_data($post_id) {
+    $contexto = predictafse_partido_ctx($post_id);
 
     $local_forma = '';
     $visitante_forma = '';
     if (!empty($contexto['prediccion_api'])) {
-        $local_forma = predictafseGetPartidoFormaFromApi($contexto['prediccion_api'], 'home');
-        $visitante_forma = predictafseGetPartidoFormaFromApi($contexto['prediccion_api'], 'away');
+        $local_forma = predictafse_partido_forma($contexto['prediccion_api'], 'home');
+        $visitante_forma = predictafse_partido_forma($contexto['prediccion_api'], 'away');
     }
 
     $local_nombre = $contexto['local_nombre'];
     $visitante_nombre = $contexto['visitante_nombre'];
     $liga_nombre = $contexto['liga_nombre'];
-    $excerpt = predictafseGetPartidoCardExcerpt($post_id, $contexto);
+    $excerpt = predictafse_partido_excerpt($post_id, $contexto);
 
     return array(
         'post_id'          => $post_id,
@@ -185,8 +185,8 @@ function predictafseBuildPartidoCardFromPost($post_id) {
         'visitante_nombre' => $visitante_nombre,
         'local_forma'      => $local_forma,
         'visitante_forma'  => $visitante_forma,
-        'local_short'      => predictafseGetTeamShortName($contexto['local']),
-        'visitante_short'  => predictafseGetTeamShortName($contexto['visitante']),
+        'local_short'      => predictafse_team_short($contexto['local']),
+        'visitante_short'  => predictafse_team_short($contexto['visitante']),
         'excerpt'          => $excerpt,
         'prob'             => $contexto['prob'],
         'url'              => get_permalink($post_id),
@@ -194,14 +194,14 @@ function predictafseBuildPartidoCardFromPost($post_id) {
         'hora'             => $contexto['hora'],
         'ciudad'           => $contexto['ciudad'],
         'estadio'          => $contexto['estadio'],
-        'start_date'       => predictafseFormatPartidoStartDate($contexto['fecha'], $contexto['hora']),
+        'start_date'       => predictafse_partido_date($contexto['fecha'], $contexto['hora']),
         'event_name'       => ($local_nombre !== '' && $visitante_nombre !== '')
             ? $local_nombre . ' vs ' . $visitante_nombre
             : get_the_title($post_id),
     );
 }
 
-function predictafseGetPartidoPredictionProperties($prob) {
+function predictafse_partido_pred_props($prob) {
     $props = array();
 
     if (!empty($prob['home']) && $prob['home'] !== '—') {
@@ -239,7 +239,7 @@ function predictafseGetPartidoPredictionProperties($prob) {
     return $props;
 }
 
-function predictafseGetPartidoSportsEventSchema($card) {
+function predictafse_partido_schema_event($card) {
     $event_name = $card['event_name'] ?? '';
     $liga = $card['liga'] ?? '';
     $local = $card['local_nombre'] ?? '';
@@ -313,7 +313,7 @@ function predictafseGetPartidoSportsEventSchema($card) {
         );
     }
 
-    $prediction_props = predictafseGetPartidoPredictionProperties($card['prob'] ?? array());
+    $prediction_props = predictafse_partido_pred_props($card['prob'] ?? array());
     if (!empty($prediction_props)) {
         $schema['additionalProperty'] = $prediction_props;
     }
@@ -321,7 +321,7 @@ function predictafseGetPartidoSportsEventSchema($card) {
     return wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
-function predictafseGetPartidosItemListSchema($cards) {
+function predictafse_partidos_schema_list($cards) {
     if (empty($cards)) {
         return '';
     }
@@ -356,14 +356,14 @@ function predictafseGetPartidosItemListSchema($cards) {
     return wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
-function predictafseRenderPartidoProbValue($value) {
+function predictafse_partido_prob_html($value) {
     if ($value === '—' || $value === '') {
         return '—';
     }
     return esc_html($value) . '%';
 }
 
-function predictafseRenderHomePartidosMoreBtn($url) {
+function predictafse_partidos_more_btn($url) {
     if ($url === '') {
         return '';
     }
@@ -373,7 +373,7 @@ function predictafseRenderHomePartidosMoreBtn($url) {
     return '<div class="home-partidos-more"><a class="home-partidos-more-btn" href="' . esc_url($url) . '"><span class="home-partidos-more-btn-inner">' . $texto . '<span class="home-partidos-more-btn-icon" aria-hidden="true"></span></span><span class="home-partidos-more-btn-shine" aria-hidden="true"></span></a></div>';
 }
 
-function predictafseRenderPartidoCard($card) {
+function predictafse_partido_card_html($card) {
     $liga = $card['liga'] ?? '';
     $local_nombre = $card['local_nombre'] ?? '';
     $visitante_nombre = $card['visitante_nombre'] ?? '';
@@ -386,7 +386,7 @@ function predictafseRenderPartidoCard($card) {
     $url = $card['url'] ?? '';
     $confidence = $prob['confidence'] ?? '—';
     $event_name = $card['event_name'] ?? '';
-    $schema_json = predictafseGetPartidoSportsEventSchema($card);
+    $schema_json = predictafse_partido_schema_event($card);
     ?>
     <article
         class="partido-card"
@@ -462,21 +462,21 @@ function predictafseRenderPartidoCard($card) {
                         <span class="partido-prob-team"><?php echo esc_html($local_short); ?></span>
                         <div class="partido-prob-box home" itemprop="additionalProperty" itemscope itemtype="https://schema.org/PropertyValue">
                             <meta itemprop="name" content="homeWinProbability">
-                            <span class="partido-prob-val home" itemprop="value"><?php echo predictafseRenderPartidoProbValue($prob['home'] ?? '—'); ?></span>
+                            <span class="partido-prob-val home" itemprop="value"><?php echo predictafse_partido_prob_html($prob['home'] ?? '—'); ?></span>
                         </div>
                     </div>
                     <div class="partido-prob-cell">
                         <span class="partido-prob-team">X</span>
                         <div class="partido-prob-box draw" itemprop="additionalProperty" itemscope itemtype="https://schema.org/PropertyValue">
                             <meta itemprop="name" content="drawProbability">
-                            <span class="partido-prob-val draw" itemprop="value"><?php echo predictafseRenderPartidoProbValue($prob['draw'] ?? '—'); ?></span>
+                            <span class="partido-prob-val draw" itemprop="value"><?php echo predictafse_partido_prob_html($prob['draw'] ?? '—'); ?></span>
                         </div>
                     </div>
                     <div class="partido-prob-cell">
                         <span class="partido-prob-team"><?php echo esc_html($visitante_short); ?></span>
                         <div class="partido-prob-box away" itemprop="additionalProperty" itemscope itemtype="https://schema.org/PropertyValue">
                             <meta itemprop="name" content="awayWinProbability">
-                            <span class="partido-prob-val away" itemprop="value"><?php echo predictafseRenderPartidoProbValue($prob['away'] ?? '—'); ?></span>
+                            <span class="partido-prob-val away" itemprop="value"><?php echo predictafse_partido_prob_html($prob['away'] ?? '—'); ?></span>
                         </div>
                     </div>
                 </div>
@@ -493,7 +493,7 @@ function predictafseRenderPartidoCard($card) {
     <?php
 }
 
-function partidosGrid($atts) {
+function predictafse_sc_partidos($atts) {
     $atts = shortcode_atts(array(
         'per_page'  => 9,
         'home'      => '0',
@@ -534,12 +534,12 @@ function partidosGrid($atts) {
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-            $cards[] = predictafseBuildPartidoCardFromPost(get_the_ID());
+            $cards[] = predictafse_partido_card_data(get_the_ID());
         }
         wp_reset_postdata();
     }
 
-    $item_list_schema = predictafseGetPartidosItemListSchema($cards);
+    $item_list_schema = predictafse_partidos_schema_list($cards);
 
     ob_start();
 
@@ -556,7 +556,7 @@ function partidosGrid($atts) {
     <div class="partidos-grid<?php echo $es_home ? ' partidos-grid--home' : ''; ?>">
         <?php if (!empty($cards)) : ?>
             <?php foreach ($cards as $card) : ?>
-                <?php predictafseRenderPartidoCard($card); ?>
+                <?php predictafse_partido_card_html($card); ?>
             <?php endforeach; ?>
         <?php else : ?>
             <p class="partidos-empty"><?php esc_html_e('No hay partidos publicados en este momento.', 'predictafse'); ?></p>
@@ -564,7 +564,7 @@ function partidosGrid($atts) {
     </div>
 
     <?php if ($mostrar_mas && $es_home && $query->found_posts > 0) : ?>
-        <?php echo predictafseRenderHomePartidosMoreBtn(predictafseGetPartidosArchiveUrl()); ?>
+        <?php echo predictafse_partidos_more_btn(predictafse_partidos_url()); ?>
     <?php endif; ?>
 
     <?php if ($query->max_num_pages > 1 && !$es_home) : ?>
@@ -593,4 +593,4 @@ function partidosGrid($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('partidos_grid', 'partidosGrid');
+add_shortcode('partidos_grid', 'predictafse_sc_partidos');

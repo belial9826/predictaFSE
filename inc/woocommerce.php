@@ -1,10 +1,10 @@
 <?php
 
-function predictafseObtenerUrlPlanesSuscripcion() {
+function predictafse_planes_url() {
     return trailingslashit(home_url()) . '#planes-suscripcion';
 }
 
-function predictafseRedirigirCarritoCheckoutVacio() {
+function predictafse_wc_empty_redirect() {
     if (is_admin() || wp_doing_ajax()) {
         return;
     }
@@ -26,17 +26,17 @@ function predictafseRedirigirCarritoCheckoutVacio() {
     }
 
     // wp_safe_redirect elimina el fragmento (#); la URL se construye desde home_url().
-    wp_redirect(predictafseObtenerUrlPlanesSuscripcion());
+    wp_redirect(predictafse_planes_url());
     exit;
 }
-add_action('template_redirect', 'predictafseRedirigirCarritoCheckoutVacio', 5);
+add_action('template_redirect', 'predictafse_wc_empty_redirect', 5);
 
-function predictafseEvitarRedireccionCheckoutVacioWc() {
+function predictafse_wc_empty_filter() {
     return false;
 }
-add_filter('woocommerce_checkout_redirect_empty_cart', 'predictafseEvitarRedireccionCheckoutVacioWc');
+add_filter('woocommerce_checkout_redirect_empty_cart', 'predictafse_wc_empty_filter');
 
-function predictafseAgregarClaseBodyWooCommerce($classes) {
+function predictafse_wc_body_class($classes) {
     if (!function_exists('is_cart') || !function_exists('is_checkout')) {
         return $classes;
     }
@@ -55,4 +55,4 @@ function predictafseAgregarClaseBodyWooCommerce($classes) {
 
     return $classes;
 }
-add_filter('body_class', 'predictafseAgregarClaseBodyWooCommerce');
+add_filter('body_class', 'predictafse_wc_body_class');
