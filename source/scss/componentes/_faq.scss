@@ -1,5 +1,5 @@
 @use 'sass:color';
-@use 'variables' as *;
+@use '../general/variables' as *;
 
 $faq-max-width: 1280px;
 $faq-breakpoint-lg: 1024px;

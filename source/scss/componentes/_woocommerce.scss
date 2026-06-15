@@ -1,5 +1,5 @@
 @use 'sass:color';
-@use 'variables' as *;
+@use '../general/variables' as *;
 
 $woo-max-width: 1280px;
 $woo-breakpoint-sm: 640px;
