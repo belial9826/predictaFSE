@@ -122,7 +122,7 @@ function predictafse_enqueue_style_bundle($handle, $relative_path, $deps = array
     );
 }
 
-function predictafse_register_editor_styles() {
+function predictafse_register_editor_styles() { 
     add_editor_style(array(
         'assets/icofont/icofont.min.css',
         'assets/css/main.min.css',
