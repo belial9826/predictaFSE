@@ -41,7 +41,12 @@ function predictafseAgregarClaseBodyWooCommerce($classes) {
         return $classes;
     }
 
-    if (is_cart() || is_checkout() || (function_exists('is_order_received_page') && is_order_received_page())) {
+    if (
+        is_cart()
+        || is_checkout()
+        || (function_exists('is_order_received_page') && is_order_received_page())
+        || (function_exists('is_account_page') && is_account_page())
+    ) {
         $classes[] = 'predictafse-woocommerce';
     }
 
@@ -51,6 +56,14 @@ function predictafseAgregarClaseBodyWooCommerce($classes) {
 
     if (is_checkout() && !(function_exists('is_order_received_page') && is_order_received_page())) {
         $classes[] = 'predictafse-checkout';
+    }
+
+    if (function_exists('is_account_page') && is_account_page()) {
+        $classes[] = 'predictafse-account';
+
+        if (!is_user_logged_in()) {
+            $classes[] = 'predictafse-account-guest';
+        }
     }
 
     return $classes;
