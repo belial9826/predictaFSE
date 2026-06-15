@@ -1,6 +1,15 @@
 <?php
 /**
  * Encolado de estilos y scripts para el tema Predicta FSE
+ *
+ * Bundles por vista (front):
+ * - main.min.css + icofont → siempre
+ * - home.min.css            → portada / blog index
+ * - contact.min.css         → página de contacto
+ * - faq.min.css             → página FAQ
+ * - pronosticos.min.css     → directorio de pronósticos (+ home.min.css por tarjetas)
+ * - partido.min.css         → single CPT partido
+ * - woocommerce.min.css     → carrito, checkout y confirmación de pedido
  */
 
 function predictafseGetAssetVersion($relative_path) {
@@ -30,71 +39,27 @@ function predictafseGetTemplateSlug() {
     return '';
 }
 
-function predictafseIsHomeContext() {
-    if (is_front_page() || is_home()) {
-        return true;
-    }
-
+function predictafseTemplateSlugMatches($needles) {
     $slug = predictafseGetTemplateSlug();
-    return in_array($slug, array('front-page', 'home'), true);
-}
-
-function predictafseIsContactContext() {
-    if (!is_page()) {
+    if ($slug === '') {
         return false;
     }
 
-    $slug = predictafseGetTemplateSlug();
-    if ($slug === 'page-contacto') {
-        return true;
-    }
+    foreach ((array) $needles as $needle) {
+        if ($slug === $needle) {
+            return true;
+        }
 
-    $post = get_queried_object();
-    if ($post instanceof WP_Post && $post->post_name === 'contactenos') {
-        return true;
-    }
+        if ($slug === 'templates/' . $needle . '.html') {
+            return true;
+        }
 
-    return false;
-}
-
-function predictafseIsFaqContext() {
-    if (!is_page()) {
-        return false;
-    }
-
-    $slug = predictafseGetTemplateSlug();
-    if ($slug === 'page-faq') {
-        return true;
-    }
-
-    $post = get_queried_object();
-    if ($post instanceof WP_Post && in_array($post->post_name, array('faq', 'preguntas-frecuentes'), true)) {
-        return true;
+        if (str_ends_with($slug, '/' . $needle . '.html')) {
+            return true;
+        }
     }
 
     return false;
-}
-
-function predictafseIsPronosticosContext() {
-    if (!is_page()) {
-        return false;
-    }
-
-    $slug = predictafseGetTemplateSlug();
-    if ($slug === 'page-pronosticos') {
-        return true;
-    }
-
-    $post = get_queried_object();
-    if ($post instanceof WP_Post && in_array($post->post_name, array('pronosticos-de-futbol', 'pronosticos-futbol'), true)) {
-        return true;
-    }
-
-    return false;
-}
-
-function predictafseIsPartidoContext() {
-    return is_singular('partido');
 }
 
 function predictafseIsWooCommerceContext() {
@@ -113,12 +78,97 @@ function predictafseIsWooCommerceContext() {
     return false;
 }
 
+function predictafseIsHomeContext() {
+    if (predictafseIsWooCommerceContext()) {
+        return false;
+    }
+
+    if (is_front_page()) {
+        return true;
+    }
+
+    if (is_home()) {
+        return true;
+    }
+
+    return predictafseTemplateSlugMatches(array('front-page', 'home'));
+}
+
+function predictafseIsContactContext() {
+    if (!is_page() || is_front_page() || predictafseIsWooCommerceContext()) {
+        return false;
+    }
+
+    if (predictafseTemplateSlugMatches('page-contacto')) {
+        return true;
+    }
+
+    $post = get_queried_object();
+    if ($post instanceof WP_Post && $post->post_name === 'contactenos') {
+        return true;
+    }
+
+    return false;
+}
+
+function predictafseIsFaqContext() {
+    if (!is_page() || is_front_page() || predictafseIsWooCommerceContext()) {
+        return false;
+    }
+
+    if (predictafseTemplateSlugMatches('page-faq')) {
+        return true;
+    }
+
+    $post = get_queried_object();
+    if ($post instanceof WP_Post && in_array($post->post_name, array('faq', 'preguntas-frecuentes'), true)) {
+        return true;
+    }
+
+    return false;
+}
+
+function predictafseIsPronosticosContext() {
+    if (!is_page() || is_front_page() || predictafseIsWooCommerceContext()) {
+        return false;
+    }
+
+    if (predictafseTemplateSlugMatches('page-pronosticos')) {
+        return true;
+    }
+
+    $post = get_queried_object();
+    if ($post instanceof WP_Post && in_array($post->post_name, array('pronosticos-de-futbol', 'pronosticos-futbol'), true)) {
+        return true;
+    }
+
+    return false;
+}
+
+function predictafseIsPartidoContext() {
+    if (predictafseIsWooCommerceContext()) {
+        return false;
+    }
+
+    return is_singular('partido');
+}
+
 function predictafseEnqueueStyleBundle($handle, $relative_path, $deps = array()) {
     wp_enqueue_style(
         $handle,
         get_template_directory_uri() . '/' . ltrim($relative_path, '/'),
         $deps,
         predictafseGetAssetVersion($relative_path)
+    );
+}
+
+function predictafseEnqueueScripts() {
+    wp_enqueue_script(
+        'predictafse-scripts',
+        get_template_directory_uri() . '/assets/js/main.min.js',
+        array('jquery'),
+        predictafseGetAssetVersion('assets/js/main.min.js'),
+        true
     );
 }
 
@@ -151,6 +201,13 @@ function predictafseEnqueueAssets() {
     predictafseEnqueueStyleBundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
     predictafseEnqueueStyleBundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
 
+    // WooCommerce: solo main + woocommerce; sin bundles de otras vistas del theme.
+    if (predictafseIsWooCommerceContext()) {
+        predictafseEnqueueStyleBundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
+        predictafseEnqueueScripts();
+        return;
+    }
+
     if (predictafseIsHomeContext()) {
         predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
     }
@@ -172,16 +229,6 @@ function predictafseEnqueueAssets() {
         predictafseEnqueueStyleBundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
     }
 
-    if (predictafseIsWooCommerceContext()) {
-        predictafseEnqueueStyleBundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
-    }
-
-    wp_enqueue_script(
-        'predictafse-scripts',
-        get_template_directory_uri() . '/assets/js/main.min.js',
-        array('jquery'),
-        predictafseGetAssetVersion('assets/js/main.min.js'),
-        true
-    );
+    predictafseEnqueueScripts();
 }
 add_action('wp_enqueue_scripts', 'predictafseEnqueueAssets');
