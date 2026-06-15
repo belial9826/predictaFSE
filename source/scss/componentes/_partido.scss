@@ -1,5 +1,5 @@
 @use 'sass:color';
-@use 'variables' as *;
+@use '../general/variables' as *;
 
 $partido-max-width: 1280px;
 $partido-breakpoint-lg: 1024px;
