@@ -3,7 +3,7 @@
  * Encolado de estilos y scripts para el tema Predicta FSE
  */
 
-function predictafse_get_asset_version($relative_path) {
+function predictafse_asset_ver($relative_path) {
     $file = get_template_directory() . '/' . ltrim($relative_path, '/');
     if (file_exists($file)) {
         return (string) filemtime($file);
@@ -11,7 +11,7 @@ function predictafse_get_asset_version($relative_path) {
     return '1.0.0';
 }
 
-function predictafse_get_template_slug() {
+function predictafse_tpl_slug() {
     if (is_singular()) {
         $slug = get_page_template_slug(get_queried_object_id());
         if (!empty($slug)) {
@@ -30,21 +30,21 @@ function predictafse_get_template_slug() {
     return '';
 }
 
-function predictafse_is_home_context() {
+function predictafse_ctx_home() {
     if (is_front_page() || is_home()) {
         return true;
     }
 
-    $slug = predictafse_get_template_slug();
+    $slug = predictafse_tpl_slug();
     return in_array($slug, array('front-page', 'home'), true);
 }
 
-function predictafse_is_contact_context() {
+function predictafse_ctx_contact() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafse_get_template_slug();
+    $slug = predictafse_tpl_slug();
     if ($slug === 'page-contacto') {
         return true;
     }
@@ -57,12 +57,12 @@ function predictafse_is_contact_context() {
     return false;
 }
 
-function predictafse_is_faq_context() {
+function predictafse_ctx_faq() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafse_get_template_slug();
+    $slug = predictafse_tpl_slug();
     if ($slug === 'page-faq') {
         return true;
     }
@@ -75,12 +75,12 @@ function predictafse_is_faq_context() {
     return false;
 }
 
-function predictafse_is_pronosticos_context() {
+function predictafse_ctx_pronosticos() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafse_get_template_slug();
+    $slug = predictafse_tpl_slug();
     if ($slug === 'page-pronosticos') {
         return true;
     }
@@ -93,11 +93,11 @@ function predictafse_is_pronosticos_context() {
     return false;
 }
 
-function predictafse_is_partido_context() {
+function predictafse_ctx_partido() {
     return is_singular('partido');
 }
 
-function predictafse_is_woocommerce_context() {
+function predictafse_ctx_wc() {
     if (!function_exists('is_cart') || !function_exists('is_checkout')) {
         return false;
     }
@@ -113,16 +113,16 @@ function predictafse_is_woocommerce_context() {
     return false;
 }
 
-function predictafse_enqueue_style_bundle($handle, $relative_path, $deps = array()) {
+function predictafse_enq_style($handle, $relative_path, $deps = array()) {
     wp_enqueue_style(
         $handle,
         get_template_directory_uri() . '/' . ltrim($relative_path, '/'),
         $deps,
-        predictafse_get_asset_version($relative_path)
+        predictafse_asset_ver($relative_path)
     );
 }
 
-function predictafse_register_editor_styles() { 
+function predictafse_editor_styles() { 
     add_editor_style(array(
         'assets/icofont/icofont.min.css',
         'assets/css/main.min.css',
@@ -134,54 +134,54 @@ function predictafse_register_editor_styles() {
         'assets/css/woocommerce.min.css',
     ));
 }
-add_action('after_setup_theme', 'predictafse_register_editor_styles', 20);
+add_action('after_setup_theme', 'predictafse_editor_styles', 20);
 
-function predictafse_enqueue_editor_assets() {
-    predictafse_enqueue_style_bundle('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
-    predictafse_enqueue_style_bundle('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
-    predictafse_enqueue_style_bundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
-    predictafse_enqueue_style_bundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
-    predictafse_enqueue_style_bundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
-    predictafse_enqueue_style_bundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
-    predictafse_enqueue_style_bundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
+function predictafse_enq_editor() {
+    predictafse_enq_style('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
+    predictafse_enq_style('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
+    predictafse_enq_style('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
+    predictafse_enq_style('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
+    predictafse_enq_style('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
+    predictafse_enq_style('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
+    predictafse_enq_style('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
 }
-add_action('enqueue_block_editor_assets', 'predictafse_enqueue_editor_assets');
+add_action('enqueue_block_editor_assets', 'predictafse_enq_editor');
 
-function predictafse_enqueue_assets() {
-    predictafse_enqueue_style_bundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
-    predictafse_enqueue_style_bundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
+function predictafse_enq_assets() {
+    predictafse_enq_style('predictafse-icofont', 'assets/icofont/icofont.min.css');
+    predictafse_enq_style('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
 
-    if (predictafse_is_home_context()) {
-        predictafse_enqueue_style_bundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
+    if (predictafse_ctx_home()) {
+        predictafse_enq_style('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
     }
 
-    if (predictafse_is_contact_context()) {
-        predictafse_enqueue_style_bundle('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
+    if (predictafse_ctx_contact()) {
+        predictafse_enq_style('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
     }
 
-    if (predictafse_is_faq_context()) {
-        predictafse_enqueue_style_bundle('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
+    if (predictafse_ctx_faq()) {
+        predictafse_enq_style('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
     }
 
-    if (predictafse_is_pronosticos_context()) {
-        predictafse_enqueue_style_bundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-        predictafse_enqueue_style_bundle('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
+    if (predictafse_ctx_pronosticos()) {
+        predictafse_enq_style('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
+        predictafse_enq_style('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
     }
 
-    if (predictafse_is_partido_context()) {
-        predictafse_enqueue_style_bundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
+    if (predictafse_ctx_partido()) {
+        predictafse_enq_style('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
     }
 
-    if (predictafse_is_woocommerce_context()) {
-        predictafse_enqueue_style_bundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
+    if (predictafse_ctx_wc()) {
+        predictafse_enq_style('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
     }
 
     wp_enqueue_script(
         'predictafse-scripts',
         get_template_directory_uri() . '/assets/js/main.min.js',
         array('jquery'),
-        predictafse_get_asset_version('assets/js/main.min.js'),
+        predictafse_asset_ver('assets/js/main.min.js'),
         true
     );
 }
-add_action('wp_enqueue_scripts', 'predictafse_enqueue_assets');
+add_action('wp_enqueue_scripts', 'predictafse_enq_assets');

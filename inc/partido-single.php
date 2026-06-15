@@ -1,6 +1,6 @@
 <?php
 
-function predictafse_user_has_recent_futbol_orders($user_id = 0) {
+function predictafse_user_has_orders($user_id = 0) {
     if (!function_exists('wc_get_orders')) {
         return false;
     }
@@ -39,7 +39,7 @@ function predictafse_user_has_recent_futbol_orders($user_id = 0) {
     return false;
 }
 
-function predictafse_get_partido_contexto($post_id = 0) {
+function predictafse_partido_ctx($post_id = 0) {
     if (empty($post_id)) {
         $post_id = get_the_ID();
     }
@@ -56,7 +56,7 @@ function predictafse_get_partido_contexto($post_id = 0) {
         'hora'              => '',
         'ciudad'            => '',
         'estadio'           => '',
-        'prob'              => predictafse_get_partido_probabilities($post_id),
+        'prob'              => predictafse_partido_prob($post_id),
         'prediccion_api'    => array(),
         'analisis'          => array(),
         'marcador'          => '—',
@@ -119,7 +119,7 @@ function predictafse_get_partido_contexto($post_id = 0) {
     return $contexto;
 }
 
-function predictafse_user_can_view_partido_premium($post_id = 0) {
+function predictafse_can_view_premium($post_id = 0) {
     if (empty($post_id)) {
         $post_id = get_the_ID();
     }
@@ -132,7 +132,7 @@ function predictafse_user_can_view_partido_premium($post_id = 0) {
         return false;
     }
 
-    if (predictafse_user_has_recent_futbol_orders(get_current_user_id())) {
+    if (predictafse_user_has_orders(get_current_user_id())) {
         return true;
     }
 
@@ -157,10 +157,10 @@ function predictafse_user_can_view_partido_premium($post_id = 0) {
     return false;
 }
 
-function predictafse_render_partido_metricas($contexto) {
+function predictafse_partido_metricas_html($contexto) {
     $prob = $contexto['prob'];
-    $local_short = predictafse_get_team_short_name($contexto['local']);
-    $visitante_short = predictafse_get_team_short_name($contexto['visitante']);
+    $local_short = predictafse_team_short($contexto['local']);
+    $visitante_short = predictafse_team_short($contexto['visitante']);
     $home = is_numeric($prob['home']) ? (int) $prob['home'] : 0;
     $draw = is_numeric($prob['draw']) ? (int) $prob['draw'] : 0;
     $away = is_numeric($prob['away']) ? (int) $prob['away'] : 0;
@@ -219,12 +219,12 @@ function predictafse_render_partido_metricas($contexto) {
     return ob_get_clean();
 }
 
-function predictafse_partido_hero() {
+function predictafse_sc_partido_hero() {
     if (!is_singular('partido')) {
         return '';
     }
 
-    $contexto = predictafse_get_partido_contexto();
+    $contexto = predictafse_partido_ctx();
     $home_url = esc_url(home_url('/'));
 
     ob_start();
@@ -276,9 +276,9 @@ function predictafse_partido_hero() {
     <?php
     return ob_get_clean();
 }
-add_shortcode('partido_hero', 'predictafse_partido_hero');
+add_shortcode('partido_hero', 'predictafse_sc_partido_hero');
 
-function predictafse_partido_sidebar() {
+function predictafse_sc_partido_sidebar() {
     if (!is_singular('partido')) {
         return '';
     }
@@ -290,19 +290,19 @@ function predictafse_partido_sidebar() {
         dynamic_sidebar('sidebar-1');
         echo '</aside>';
     } else {
-        echo predictafse_partido_widget_lateral();
+        echo predictafse_sc_partido_widget();
     }
 
     return ob_get_clean();
 }
-add_shortcode('partido_sidebar', 'predictafse_partido_sidebar');
+add_shortcode('partido_sidebar', 'predictafse_sc_partido_sidebar');
 
-function predictafse_partido_widget_lateral() {
+function predictafse_sc_partido_widget() {
     if (!is_singular('partido')) {
         return '';
     }
 
-    $contexto = predictafse_get_partido_contexto();
+    $contexto = predictafse_partido_ctx();
     $membresia_url = esc_url(home_url('/membresia/'));
 
     ob_start();
@@ -332,7 +332,7 @@ function predictafse_partido_widget_lateral() {
             </ul>
         </div>
 
-        <?php echo predictafse_render_partido_metricas($contexto); ?>
+        <?php echo predictafse_partido_metricas_html($contexto); ?>
 
         <div class="partido-widget partido-cta-premium">
             <span class="partido-cta-badge"><?php esc_html_e('Módulo de suscripción', 'predictafse'); ?></span>
@@ -344,15 +344,15 @@ function predictafse_partido_widget_lateral() {
     <?php
     return ob_get_clean();
 }
-add_shortcode('partido_widget_lateral', 'predictafse_partido_widget_lateral');
+add_shortcode('partido_widget_lateral', 'predictafse_sc_partido_widget');
 
-function predictafse_partido_premium() {
+function predictafse_sc_partido_premium() {
     if (!is_singular('partido')) {
         return '';
     }
 
     $post_id = get_the_ID();
-    $contexto = predictafse_get_partido_contexto($post_id);
+    $contexto = predictafse_partido_ctx($post_id);
     $membresia_url = esc_url(home_url('/membresia/'));
     $login_url = function_exists('wc_get_page_permalink') ? esc_url(wc_get_page_permalink('myaccount')) : esc_url(wp_login_url());
 
@@ -366,7 +366,7 @@ function predictafse_partido_premium() {
                 <p><?php esc_html_e('Inicia sesión para acceder al desglose táctico premium generado por IA.', 'predictafse'); ?></p>
                 <a class="partido-cta-btn" href="<?php echo $login_url; ?>"><?php esc_html_e('Iniciar sesión', 'predictafse'); ?></a>
             </div>
-        <?php elseif (!predictafse_user_can_view_partido_premium($post_id)) : ?>
+        <?php elseif (!predictafse_can_view_premium($post_id)) : ?>
             <div class="partido-premium-lock">
                 <p><?php esc_html_e('Has alcanzado el límite de pronósticos gratuitos. Activa tu membresía para ver el análisis completo.', 'predictafse'); ?></p>
                 <a class="partido-cta-btn" href="<?php echo $membresia_url; ?>"><?php esc_html_e('Comprar membresía', 'predictafse'); ?></a>
@@ -417,17 +417,17 @@ function predictafse_partido_premium() {
     <?php
     return ob_get_clean();
 }
-add_shortcode('partido_premium', 'predictafse_partido_premium');
+add_shortcode('partido_premium', 'predictafse_sc_partido_premium');
 
-function predictafse_registrar_tags_partido() {
+function predictafse_register_partido_tags() {
     register_taxonomy_for_object_type('post_tag', 'partido');
 }
-add_action('init', 'predictafse_registrar_tags_partido', 20);
+add_action('init', 'predictafse_register_partido_tags', 20);
 
-function predictafse_body_class_partido($classes) {
+function predictafse_partido_body_class($classes) {
     if (is_singular('partido')) {
         $classes[] = 'predictafse-partido';
     }
     return $classes;
 }
-add_filter('body_class', 'predictafse_body_class_partido');
+add_filter('body_class', 'predictafse_partido_body_class');

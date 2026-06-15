@@ -1,6 +1,6 @@
 <?php
 
-function predictafse_obtener_contenido_patron_html($ruta_relativa) {
+function predictafse_pattern_html($ruta_relativa) {
     $ruta = get_template_directory() . '/' . ltrim($ruta_relativa, '/');
 
     if (!file_exists($ruta) || !is_readable($ruta)) {
@@ -10,7 +10,7 @@ function predictafse_obtener_contenido_patron_html($ruta_relativa) {
     return trim(file_get_contents($ruta));
 }
 
-function predictafse_registrar_categorias_patrones() {
+function predictafse_register_pattern_cats() {
     if (!function_exists('register_block_pattern_category')) {
         return;
     }
@@ -22,9 +22,9 @@ function predictafse_registrar_categorias_patrones() {
         )
     );
 }
-add_action('init', 'predictafse_registrar_categorias_patrones', 9);
+add_action('init', 'predictafse_register_pattern_cats', 9);
 
-function predictafse_registrar_patrones() {
+function predictafse_register_patterns() {
     if (!function_exists('register_block_pattern')) {
         return;
     }
@@ -60,7 +60,7 @@ function predictafse_registrar_patrones() {
             continue;
         }
 
-        $contenido = predictafse_obtener_contenido_patron_html($patron['file']);
+        $contenido = predictafse_pattern_html($patron['file']);
 
         if ($contenido === '') {
             continue;
@@ -81,21 +81,21 @@ function predictafse_registrar_patrones() {
         );
     }
 }
-add_action('init', 'predictafse_registrar_patrones', 11);
+add_action('init', 'predictafse_register_patterns', 11);
 
-function predictafse_body_class_paginas_tema($classes) {
-    if (function_exists('predictafse_is_contact_context') && predictafse_is_contact_context()) {
+function predictafse_page_body_class($classes) {
+    if (function_exists('predictafse_ctx_contact') && predictafse_ctx_contact()) {
         $classes[] = 'predictafse-contacto';
     }
 
-    if (function_exists('predictafse_is_faq_context') && predictafse_is_faq_context()) {
+    if (function_exists('predictafse_ctx_faq') && predictafse_ctx_faq()) {
         $classes[] = 'predictafse-faq';
     }
 
-    if (function_exists('predictafse_is_pronosticos_context') && predictafse_is_pronosticos_context()) {
+    if (function_exists('predictafse_ctx_pronosticos') && predictafse_ctx_pronosticos()) {
         $classes[] = 'predictafse-pronosticos';
     }
 
     return $classes;
 }
-add_filter('body_class', 'predictafse_body_class_paginas_tema');
+add_filter('body_class', 'predictafse_page_body_class');
