@@ -2,14 +2,8 @@
 /**
  * Encolado de estilos y scripts para el tema Predicta FSE
  *
- * Bundles por vista (front):
- * - main.min.css + icofont → siempre
- * - home.min.css            → portada / blog index
- * - contact.min.css         → página de contacto
- * - faq.min.css             → página FAQ
- * - pronosticos.min.css     → directorio de pronósticos (+ home.min.css por tarjetas)
- * - partido.min.css         → single CPT partido
- * - woocommerce.min.css     → carrito, checkout y confirmación de pedido
+ * Front-end: una sola hoja de estilos del theme por vista (incluye base + vista).
+ * icofont.min.css se mantiene aparte por ser fuente de iconos externa.
  */
 
 function predictafseGetAssetVersion($relative_path) {
@@ -153,6 +147,34 @@ function predictafseIsPartidoContext() {
     return is_singular('partido');
 }
 
+function predictafseGetFrontStyleBundle() {
+    if (predictafseIsWooCommerceContext()) {
+        return 'assets/css/woocommerce.min.css';
+    }
+
+    if (predictafseIsHomeContext()) {
+        return 'assets/css/home.min.css';
+    }
+
+    if (predictafseIsContactContext()) {
+        return 'assets/css/contact.min.css';
+    }
+
+    if (predictafseIsFaqContext()) {
+        return 'assets/css/faq.min.css';
+    }
+
+    if (predictafseIsPronosticosContext()) {
+        return 'assets/css/pronosticos.min.css';
+    }
+
+    if (predictafseIsPartidoContext()) {
+        return 'assets/css/partido.min.css';
+    }
+
+    return 'assets/css/main.min.css';
+}
+
 function predictafseEnqueueStyleBundle($handle, $relative_path, $deps = array()) {
     wp_enqueue_style(
         $handle,
@@ -189,46 +211,22 @@ add_action('after_setup_theme', 'predictafseRegisterEditorStyles', 20);
 function predictafseEnqueueEditorAssets() {
     predictafseEnqueueStyleBundle('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
     predictafseEnqueueStyleBundle('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
-    predictafseEnqueueStyleBundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
-    predictafseEnqueueStyleBundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
+    predictafseEnqueueStyleBundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-icofont-editor'));
+    predictafseEnqueueStyleBundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-icofont-editor'));
+    predictafseEnqueueStyleBundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-icofont-editor'));
+    predictafseEnqueueStyleBundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-icofont-editor'));
+    predictafseEnqueueStyleBundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-icofont-editor'));
+    predictafseEnqueueStyleBundle('predictafse-woocommerce-editor', 'assets/css/woocommerce.min.css', array('predictafse-icofont-editor'));
 }
 add_action('enqueue_block_editor_assets', 'predictafseEnqueueEditorAssets');
 
 function predictafseEnqueueAssets() {
     predictafseEnqueueStyleBundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
-    predictafseEnqueueStyleBundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
-
-    // WooCommerce: solo main + woocommerce; sin bundles de otras vistas del theme.
-    if (predictafseIsWooCommerceContext()) {
-        predictafseEnqueueStyleBundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
-        predictafseEnqueueScripts();
-        return;
-    }
-
-    if (predictafseIsHomeContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsContactContext()) {
-        predictafseEnqueueStyleBundle('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsFaqContext()) {
-        predictafseEnqueueStyleBundle('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsPronosticosContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-        predictafseEnqueueStyleBundle('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
-    }
-
-    if (predictafseIsPartidoContext()) {
-        predictafseEnqueueStyleBundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
-    }
-
+    predictafseEnqueueStyleBundle(
+        'predictafse-styles',
+        predictafseGetFrontStyleBundle(),
+        array('predictafse-icofont')
+    );
     predictafseEnqueueScripts();
 }
 add_action('wp_enqueue_scripts', 'predictafseEnqueueAssets');

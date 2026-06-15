@@ -1,0 +1,6 @@
+// Estilos base del theme (variables, global, componentes comunes, header, footer)
+@use 'general/variables' as *;
+@use 'general/global' as *;
+@use 'componentes/components' as *;
+@use 'general/header' as *;
+@use 'general/footer' as *;

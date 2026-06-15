@@ -1,2 +1,3 @@
-// Bundle FAQ — solo se carga en la plantilla page-faq
+// Bundle FAQ — incluye estilos base + página FAQ
+@use 'core' as *;
 @use 'componentes/faq' as *;

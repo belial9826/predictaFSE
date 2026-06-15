@@ -1,2 +1,3 @@
-// Bundle Partido — solo en single partido
+// Bundle Partido — incluye estilos base + single partido
+@use 'core' as *;
 @use 'componentes/partido' as *;
