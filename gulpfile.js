@@ -14,7 +14,12 @@ const styleEntries = [
   'source/scss/pronosticos-entry.scss',
   'source/scss/partido-entry.scss',
   'source/scss/woocommerce-entry.scss',
+  'source/scss/editor-entry.scss',
 ];
+
+const sassOptions = {
+  loadPaths: ['source/scss', 'source/scss/general', 'source/scss/vistas'],
+};
 
 const paths = {
   js: 'source/js/**/*.js',
@@ -25,7 +30,7 @@ const paths = {
 function styles() {
   return src(styleEntries)
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass(sassOptions).on('error', sass.logError))
     .pipe(cleanCSS())
     .pipe(rename(function (path) {
       path.basename = path.basename.replace('-entry', '');

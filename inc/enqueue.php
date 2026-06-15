@@ -117,6 +117,37 @@ function predictafseIsWooCommerceContext() {
     return false;
 }
 
+/**
+ * Devuelve el nombre del bundle CSS unificado (base + vista) para el front.
+ */
+function predictafseGetFrontStyleBundle() {
+    if (predictafseIsPronosticosContext()) {
+        return 'pronosticos';
+    }
+
+    if (predictafseIsHomeContext()) {
+        return 'home';
+    }
+
+    if (predictafseIsContactContext()) {
+        return 'contact';
+    }
+
+    if (predictafseIsFaqContext()) {
+        return 'faq';
+    }
+
+    if (predictafseIsPartidoContext()) {
+        return 'partido';
+    }
+
+    if (predictafseIsWooCommerceContext()) {
+        return 'woocommerce';
+    }
+
+    return 'main';
+}
+
 function predictafseEnqueueStyleBundle($handle, $relative_path, $deps = array()) {
     wp_enqueue_style(
         $handle,
@@ -129,56 +160,26 @@ function predictafseEnqueueStyleBundle($handle, $relative_path, $deps = array())
 function predictafseRegisterEditorStyles() {
     add_editor_style(array(
         'assets/icofont/icofont.min.css',
-        'assets/css/main.min.css',
-        'assets/css/home.min.css',
-        'assets/css/contact.min.css',
-        'assets/css/faq.min.css',
-        'assets/css/pronosticos.min.css',
-        'assets/css/partido.min.css',
-        'assets/css/woocommerce.min.css',
+        'assets/css/editor.min.css',
     ));
 }
 add_action('after_setup_theme', 'predictafseRegisterEditorStyles', 20);
 
 function predictafseEnqueueEditorAssets() {
     predictafseEnqueueStyleBundle('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
-    predictafseEnqueueStyleBundle('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
-    predictafseEnqueueStyleBundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
-    predictafseEnqueueStyleBundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
+    predictafseEnqueueStyleBundle('predictafse-styles-editor', 'assets/css/editor.min.css', array('predictafse-icofont-editor'));
 }
 add_action('enqueue_block_editor_assets', 'predictafseEnqueueEditorAssets');
 
 function predictafseEnqueueAssets() {
+    $bundle = predictafseGetFrontStyleBundle();
+
     predictafseEnqueueStyleBundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
-    predictafseEnqueueStyleBundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
-
-    if (predictafseIsHomeContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsContactContext()) {
-        predictafseEnqueueStyleBundle('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsFaqContext()) {
-        predictafseEnqueueStyleBundle('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsPronosticosContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-        predictafseEnqueueStyleBundle('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
-    }
-
-    if (predictafseIsPartidoContext()) {
-        predictafseEnqueueStyleBundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
-    }
-
-    if (predictafseIsWooCommerceContext()) {
-        predictafseEnqueueStyleBundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
-    }
+    predictafseEnqueueStyleBundle(
+        'predictafse-styles',
+        'assets/css/' . $bundle . '.min.css',
+        array('predictafse-icofont')
+    );
 
     wp_enqueue_script(
         'predictafse-scripts',

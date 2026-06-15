@@ -1,3 +1,3 @@
-// Bundle WooCommerce — carrito, checkout y confirmación
-@use 'variables' as *;
+// Bundle WooCommerce — base + carrito, checkout y mi cuenta
+@use 'core' as *;
 @use 'woocommerce' as *;
