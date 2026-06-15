@@ -110,6 +110,10 @@ function predictafseIsWooCommerceContext() {
         return true;
     }
 
+    if (function_exists('is_account_page') && is_account_page()) {
+        return true;
+    }
+
     return false;
 }
 

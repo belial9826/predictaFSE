@@ -41,7 +41,12 @@ function predictafseAgregarClaseBodyWooCommerce($classes) {
         return $classes;
     }
 
-    if (is_cart() || is_checkout() || (function_exists('is_order_received_page') && is_order_received_page())) {
+    if (
+        is_cart()
+        || is_checkout()
+        || (function_exists('is_order_received_page') && is_order_received_page())
+        || (function_exists('is_account_page') && is_account_page())
+    ) {
         $classes[] = 'predictafse-woocommerce';
     }
 
@@ -53,6 +58,25 @@ function predictafseAgregarClaseBodyWooCommerce($classes) {
         $classes[] = 'predictafse-checkout';
     }
 
+    if (function_exists('is_account_page') && is_account_page()) {
+        $classes[] = 'predictafse-account';
+
+        if (!is_user_logged_in()) {
+            $classes[] = 'predictafse-account-guest';
+        }
+    }
+
     return $classes;
 }
 add_filter('body_class', 'predictafseAgregarClaseBodyWooCommerce');
+
+function predictafseDequeueWcLayoutEnCuenta() {
+    if (!function_exists('is_account_page') || !is_account_page()) {
+        return;
+    }
+
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+    wp_dequeue_style('woocommerce-general');
+}
+add_action('wp_enqueue_scripts', 'predictafseDequeueWcLayoutEnCuenta', 200);
