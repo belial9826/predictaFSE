@@ -3,7 +3,7 @@
  * Encolado de estilos y scripts para el tema Predicta FSE
  */
 
-function predictafseGetAssetVersion($relative_path) {
+function predictafse_get_asset_version($relative_path) {
     $file = get_template_directory() . '/' . ltrim($relative_path, '/');
     if (file_exists($file)) {
         return (string) filemtime($file);
@@ -11,7 +11,7 @@ function predictafseGetAssetVersion($relative_path) {
     return '1.0.0';
 }
 
-function predictafseGetTemplateSlug() {
+function predictafse_get_template_slug() {
     if (is_singular()) {
         $slug = get_page_template_slug(get_queried_object_id());
         if (!empty($slug)) {
@@ -30,21 +30,21 @@ function predictafseGetTemplateSlug() {
     return '';
 }
 
-function predictafseIsHomeContext() {
+function predictafse_is_home_context() {
     if (is_front_page() || is_home()) {
         return true;
     }
 
-    $slug = predictafseGetTemplateSlug();
+    $slug = predictafse_get_template_slug();
     return in_array($slug, array('front-page', 'home'), true);
 }
 
-function predictafseIsContactContext() {
+function predictafse_is_contact_context() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafseGetTemplateSlug();
+    $slug = predictafse_get_template_slug();
     if ($slug === 'page-contacto') {
         return true;
     }
@@ -57,12 +57,12 @@ function predictafseIsContactContext() {
     return false;
 }
 
-function predictafseIsFaqContext() {
+function predictafse_is_faq_context() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafseGetTemplateSlug();
+    $slug = predictafse_get_template_slug();
     if ($slug === 'page-faq') {
         return true;
     }
@@ -75,12 +75,12 @@ function predictafseIsFaqContext() {
     return false;
 }
 
-function predictafseIsPronosticosContext() {
+function predictafse_is_pronosticos_context() {
     if (!is_page()) {
         return false;
     }
 
-    $slug = predictafseGetTemplateSlug();
+    $slug = predictafse_get_template_slug();
     if ($slug === 'page-pronosticos') {
         return true;
     }
@@ -93,11 +93,11 @@ function predictafseIsPronosticosContext() {
     return false;
 }
 
-function predictafseIsPartidoContext() {
+function predictafse_is_partido_context() {
     return is_singular('partido');
 }
 
-function predictafseIsWooCommerceContext() {
+function predictafse_is_woocommerce_context() {
     if (!function_exists('is_cart') || !function_exists('is_checkout')) {
         return false;
     }
@@ -113,16 +113,16 @@ function predictafseIsWooCommerceContext() {
     return false;
 }
 
-function predictafseEnqueueStyleBundle($handle, $relative_path, $deps = array()) {
+function predictafse_enqueue_style_bundle($handle, $relative_path, $deps = array()) {
     wp_enqueue_style(
         $handle,
         get_template_directory_uri() . '/' . ltrim($relative_path, '/'),
         $deps,
-        predictafseGetAssetVersion($relative_path)
+        predictafse_get_asset_version($relative_path)
     );
 }
 
-function predictafseRegisterEditorStyles() {
+function predictafse_register_editor_styles() {
     add_editor_style(array(
         'assets/icofont/icofont.min.css',
         'assets/css/main.min.css',
@@ -134,54 +134,54 @@ function predictafseRegisterEditorStyles() {
         'assets/css/woocommerce.min.css',
     ));
 }
-add_action('after_setup_theme', 'predictafseRegisterEditorStyles', 20);
+add_action('after_setup_theme', 'predictafse_register_editor_styles', 20);
 
-function predictafseEnqueueEditorAssets() {
-    predictafseEnqueueStyleBundle('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
-    predictafseEnqueueStyleBundle('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
-    predictafseEnqueueStyleBundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
-    predictafseEnqueueStyleBundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
-    predictafseEnqueueStyleBundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
+function predictafse_enqueue_editor_assets() {
+    predictafse_enqueue_style_bundle('predictafse-icofont-editor', 'assets/icofont/icofont.min.css');
+    predictafse_enqueue_style_bundle('predictafse-styles-editor', 'assets/css/main.min.css', array('predictafse-icofont-editor'));
+    predictafse_enqueue_style_bundle('predictafse-home-editor', 'assets/css/home.min.css', array('predictafse-styles-editor'));
+    predictafse_enqueue_style_bundle('predictafse-contact-editor', 'assets/css/contact.min.css', array('predictafse-styles-editor'));
+    predictafse_enqueue_style_bundle('predictafse-faq-editor', 'assets/css/faq.min.css', array('predictafse-styles-editor'));
+    predictafse_enqueue_style_bundle('predictafse-pronosticos-editor', 'assets/css/pronosticos.min.css', array('predictafse-styles-editor', 'predictafse-home-editor'));
+    predictafse_enqueue_style_bundle('predictafse-partido-editor', 'assets/css/partido.min.css', array('predictafse-styles-editor'));
 }
-add_action('enqueue_block_editor_assets', 'predictafseEnqueueEditorAssets');
+add_action('enqueue_block_editor_assets', 'predictafse_enqueue_editor_assets');
 
-function predictafseEnqueueAssets() {
-    predictafseEnqueueStyleBundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
-    predictafseEnqueueStyleBundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
+function predictafse_enqueue_assets() {
+    predictafse_enqueue_style_bundle('predictafse-icofont', 'assets/icofont/icofont.min.css');
+    predictafse_enqueue_style_bundle('predictafse-styles', 'assets/css/main.min.css', array('predictafse-icofont'));
 
-    if (predictafseIsHomeContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
+    if (predictafse_is_home_context()) {
+        predictafse_enqueue_style_bundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
     }
 
-    if (predictafseIsContactContext()) {
-        predictafseEnqueueStyleBundle('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
+    if (predictafse_is_contact_context()) {
+        predictafse_enqueue_style_bundle('predictafse-contact', 'assets/css/contact.min.css', array('predictafse-styles'));
     }
 
-    if (predictafseIsFaqContext()) {
-        predictafseEnqueueStyleBundle('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
+    if (predictafse_is_faq_context()) {
+        predictafse_enqueue_style_bundle('predictafse-faq', 'assets/css/faq.min.css', array('predictafse-styles'));
     }
 
-    if (predictafseIsPronosticosContext()) {
-        predictafseEnqueueStyleBundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
-        predictafseEnqueueStyleBundle('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
+    if (predictafse_is_pronosticos_context()) {
+        predictafse_enqueue_style_bundle('predictafse-home', 'assets/css/home.min.css', array('predictafse-styles'));
+        predictafse_enqueue_style_bundle('predictafse-pronosticos', 'assets/css/pronosticos.min.css', array('predictafse-styles', 'predictafse-home'));
     }
 
-    if (predictafseIsPartidoContext()) {
-        predictafseEnqueueStyleBundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
+    if (predictafse_is_partido_context()) {
+        predictafse_enqueue_style_bundle('predictafse-partido', 'assets/css/partido.min.css', array('predictafse-styles'));
     }
 
-    if (predictafseIsWooCommerceContext()) {
-        predictafseEnqueueStyleBundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
+    if (predictafse_is_woocommerce_context()) {
+        predictafse_enqueue_style_bundle('predictafse-woocommerce', 'assets/css/woocommerce.min.css', array('predictafse-styles'));
     }
 
     wp_enqueue_script(
         'predictafse-scripts',
         get_template_directory_uri() . '/assets/js/main.min.js',
         array('jquery'),
-        predictafseGetAssetVersion('assets/js/main.min.js'),
+        predictafse_get_asset_version('assets/js/main.min.js'),
         true
     );
 }
-add_action('wp_enqueue_scripts', 'predictafseEnqueueAssets');
+add_action('wp_enqueue_scripts', 'predictafse_enqueue_assets');

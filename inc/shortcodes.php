@@ -1,6 +1,6 @@
 <?php
 
-function userHeader() {
+function predictafse_user_header() {
     ob_start();
     ?>
     <div id="wrap-userHeader">
@@ -35,4 +35,4 @@ function userHeader() {
     return ob_get_clean();
 }
 
-add_shortcode('user_header', 'userHeader');
+add_shortcode('user_header', 'predictafse_user_header');

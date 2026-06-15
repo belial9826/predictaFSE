@@ -69,7 +69,7 @@ function mi_tema_fse_setup() {
 add_action( 'after_setup_theme', 'mi_tema_fse_setup' );
 
 // Registrar áreas de widgets (sidebar clásica para compatibilidad con plugins)
-function registrarAreasDeWidgets() {
+function predictafse_registrar_areas_de_widgets() {
     register_sidebar( array(
         'name'          => esc_html__( 'Barra Lateral Principal', 'predictafse' ),
         'id'            => 'sidebar-1',
@@ -80,5 +80,5 @@ function registrarAreasDeWidgets() {
         'after_title'   => '</h2>',
     ) );
 }
-add_action( 'widgets_init', 'registrarAreasDeWidgets' );
+add_action( 'widgets_init', 'predictafse_registrar_areas_de_widgets' );
 

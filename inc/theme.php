@@ -1,6 +1,6 @@
 <?php
 
-function predictafseObtenerContenidoPatronHtml($ruta_relativa) {
+function predictafse_obtener_contenido_patron_html($ruta_relativa) {
     $ruta = get_template_directory() . '/' . ltrim($ruta_relativa, '/');
 
     if (!file_exists($ruta) || !is_readable($ruta)) {
@@ -10,7 +10,7 @@ function predictafseObtenerContenidoPatronHtml($ruta_relativa) {
     return trim(file_get_contents($ruta));
 }
 
-function predictafseRegistrarCategoriasPatrones() {
+function predictafse_registrar_categorias_patrones() {
     if (!function_exists('register_block_pattern_category')) {
         return;
     }
@@ -22,9 +22,9 @@ function predictafseRegistrarCategoriasPatrones() {
         )
     );
 }
-add_action('init', 'predictafseRegistrarCategoriasPatrones', 9);
+add_action('init', 'predictafse_registrar_categorias_patrones', 9);
 
-function predictafseRegistrarPatrones() {
+function predictafse_registrar_patrones() {
     if (!function_exists('register_block_pattern')) {
         return;
     }
@@ -60,7 +60,7 @@ function predictafseRegistrarPatrones() {
             continue;
         }
 
-        $contenido = predictafseObtenerContenidoPatronHtml($patron['file']);
+        $contenido = predictafse_obtener_contenido_patron_html($patron['file']);
 
         if ($contenido === '') {
             continue;
@@ -81,21 +81,21 @@ function predictafseRegistrarPatrones() {
         );
     }
 }
-add_action('init', 'predictafseRegistrarPatrones', 11);
+add_action('init', 'predictafse_registrar_patrones', 11);
 
-function predictafseBodyClassPaginasTema($classes) {
-    if (function_exists('predictafseIsContactContext') && predictafseIsContactContext()) {
+function predictafse_body_class_paginas_tema($classes) {
+    if (function_exists('predictafse_is_contact_context') && predictafse_is_contact_context()) {
         $classes[] = 'predictafse-contacto';
     }
 
-    if (function_exists('predictafseIsFaqContext') && predictafseIsFaqContext()) {
+    if (function_exists('predictafse_is_faq_context') && predictafse_is_faq_context()) {
         $classes[] = 'predictafse-faq';
     }
 
-    if (function_exists('predictafseIsPronosticosContext') && predictafseIsPronosticosContext()) {
+    if (function_exists('predictafse_is_pronosticos_context') && predictafse_is_pronosticos_context()) {
         $classes[] = 'predictafse-pronosticos';
     }
 
     return $classes;
 }
-add_filter('body_class', 'predictafseBodyClassPaginasTema');
+add_filter('body_class', 'predictafse_body_class_paginas_tema');
